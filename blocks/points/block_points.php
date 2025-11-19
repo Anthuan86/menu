@@ -58,10 +58,10 @@ class block_points extends block_base {
         }
 
         // Get user's global points.
-        $userpoints = $DB->get_field('local_points_user', 'points', [
-            'userid' => $USER->id,
-            'courseid' => null
-        ]);
+        $userpoints = $DB->get_field_sql(
+            'SELECT points FROM {local_points_user} WHERE userid = :userid AND courseid IS NULL',
+            ['userid' => $USER->id]
+        );
         $userpoints = $userpoints ? $userpoints : 0;
 
         // Generate unique ID for this block instance.
@@ -275,10 +275,9 @@ class block_points extends block_base {
                 AND (quantity IS NULL OR quantity > 0)
                 AND (availablefrom IS NULL OR availablefrom = 0 OR availablefrom <= :now1)
                 AND (availableuntil IS NULL OR availableuntil = 0 OR availableuntil >= :now2)
-                ORDER BY cost ASC
-                LIMIT 5";
+                ORDER BY cost ASC";
 
-        $rewards = $DB->get_records_sql($sql, ['now1' => $now, 'now2' => $now]);
+        $rewards = $DB->get_records_sql($sql, ['now1' => $now, 'now2' => $now], 0, 5);
 
         if (!empty($rewards)) {
             $html .= '<div class="rewards-carousel-container">';

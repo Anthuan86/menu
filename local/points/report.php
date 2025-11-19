@@ -271,6 +271,9 @@ $sql = "SELECT h.id, h.userid, h.courseid, h.points, h.reason, h.ruleid, h.timec
 
 $records = $DB->get_records_sql($sql, $params, $page * $perpage, $perpage);
 
+// Check if downloading.
+$isdownloading = $table->is_downloading();
+
 // Populate table.
 foreach ($records as $record) {
     $row = [];
@@ -279,29 +282,46 @@ foreach ($records as $record) {
     $row[] = userdate($record->timecreated, get_string('strftimedatetime', 'langconfig'));
 
     // User.
-    $userlink = html_writer::link(
-        new moodle_url('/local/points/view.php', ['userid' => $record->userid]),
-        fullname($record)
-    );
-    $row[] = $userlink;
+    if ($isdownloading) {
+        $row[] = fullname($record);
+    } else {
+        $userlink = html_writer::link(
+            new moodle_url('/local/points/view.php', ['userid' => $record->userid]),
+            fullname($record)
+        );
+        $row[] = $userlink;
+    }
 
     // Points.
-    $pointsclass = $record->points > 0 ? 'text-success' : 'text-danger';
-    $pointsprefix = $record->points > 0 ? '+' : '';
-    $row[] = html_writer::tag('span', $pointsprefix . $record->points, ['class' => $pointsclass . ' font-weight-bold']);
+    if ($isdownloading) {
+        $pointsprefix = $record->points > 0 ? '+' : '';
+        $row[] = $pointsprefix . $record->points;
+    } else {
+        $pointsclass = $record->points > 0 ? 'text-success' : 'text-danger';
+        $pointsprefix = $record->points > 0 ? '+' : '';
+        $row[] = html_writer::tag('span', $pointsprefix . $record->points, ['class' => $pointsclass . ' font-weight-bold']);
+    }
 
     // Reason.
     $row[] = format_string($record->reason);
 
     // Rule name.
     if ($record->rulename) {
-        $rulelink = html_writer::link(
-            new moodle_url('/local/points/rules.php', ['action' => 'edit', 'ruleid' => $record->ruleid]),
-            format_string($record->rulename)
-        );
-        $row[] = $rulelink;
+        if ($isdownloading) {
+            $row[] = format_string($record->rulename);
+        } else {
+            $rulelink = html_writer::link(
+                new moodle_url('/local/points/rules.php', ['action' => 'edit', 'ruleid' => $record->ruleid]),
+                format_string($record->rulename)
+            );
+            $row[] = $rulelink;
+        }
     } else {
-        $row[] = html_writer::tag('em', get_string('manuallyawarded', 'local_points'));
+        if ($isdownloading) {
+            $row[] = get_string('manuallyawarded', 'local_points');
+        } else {
+            $row[] = html_writer::tag('em', get_string('manuallyawarded', 'local_points'));
+        }
     }
 
     // Course.
