@@ -1,0 +1,72 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_points/points_summary
+
+    Points summary template.
+
+    Context variables required for this template:
+    * points - Current points (course or global)
+    * totalpoints - Total points across all
+    * hashistory - Whether there is history
+    * history - Array of history items
+
+    Example context (json):
+    {
+        "points": 150,
+        "totalpoints": 500,
+        "hashistory": true,
+        "history": [
+            {"points": 10, "reason": "Completed activity", "date": "2024-01-15", "positive": true},
+            {"points": -5, "reason": "Late submission", "date": "2024-01-14", "positive": false}
+        ]
+    }
+}}
+<div class="local-points-summary">
+    <div class="points-display text-center mb-3">
+        <div class="points-value h1 text-primary">{{points}}</div>
+        <div class="points-label text-muted">{{#str}}points, local_points{{/str}}</div>
+    </div>
+
+    {{#hashistory}}
+    <div class="points-history">
+        <h5>{{#str}}pointshistory, local_points{{/str}}</h5>
+        <ul class="list-unstyled">
+            {{#history}}
+            <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <div>
+                    <span class="{{#positive}}text-success{{/positive}}{{^positive}}text-danger{{/positive}} font-weight-bold">
+                        {{#positive}}+{{/positive}}{{points}}
+                    </span>
+                    <span class="ml-2">{{reason}}</span>
+                </div>
+                <small class="text-muted">{{date}}</small>
+            </li>
+            {{/history}}
+        </ul>
+    </div>
+    {{/hashistory}}
+
+    {{^hashistory}}
+    <p class="text-muted text-center">{{#str}}nohistory, local_points{{/str}}</p>
+    {{/hashistory}}
+
+    <div class="total-points text-center mt-3 pt-3 border-top">
+        <small class="text-muted">{{#str}}totalpoints, local_points{{/str}}: </small>
+        <strong>{{totalpoints}}</strong>
+    </div>
+</div>
