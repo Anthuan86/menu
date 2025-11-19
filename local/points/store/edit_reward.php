@@ -50,9 +50,19 @@ if ($id) {
 
 $PAGE->set_pagelayout('admin');
 
+// File picker options.
+$filemanageroptions = [
+    'maxbytes' => $CFG->maxbytes,
+    'maxfiles' => 1,
+    'accepted_types' => ['image'],
+    'subdirs' => 0
+];
+
 // Define the form.
 class reward_form extends moodleform {
     public function definition() {
+        global $CFG;
+
         $mform = $this->_form;
 
         $mform->addElement('hidden', 'id');
@@ -89,10 +99,10 @@ class reward_form extends moodleform {
         $mform->setType('quantity', PARAM_INT);
         $mform->addHelpButton('quantity', 'stock', 'local_points');
 
-        // Image (file picker would be added here in a full implementation).
-        $mform->addElement('text', 'image', get_string('image', 'local_points'), ['size' => 50]);
-        $mform->setType('image', PARAM_FILE);
-        $mform->addHelpButton('image', 'image', 'local_points');
+        // Image file picker.
+        $mform->addElement('filemanager', 'rewardimage', get_string('image', 'local_points'), null,
+            $this->_customdata['filemanageroptions']);
+        $mform->addHelpButton('rewardimage', 'image', 'local_points');
 
         // Enabled.
         $mform->addElement('advcheckbox', 'enabled', get_string('enabled', 'local_points'));
@@ -132,17 +142,25 @@ class reward_form extends moodleform {
 $categories = $DB->get_records('local_points_reward_categories', null, 'sortorder ASC');
 
 // Create form.
-$mform = new reward_form($url, ['categories' => $categories]);
+$mform = new reward_form($url, [
+    'categories' => $categories,
+    'filemanageroptions' => $filemanageroptions
+]);
 
 // Prepare form data.
-if ($id) {
-    $formdata = clone $reward;
-    $formdata->description_editor = [
-        'text' => $reward->description,
-        'format' => FORMAT_HTML
-    ];
-    $mform->set_data($formdata);
-}
+$formdata = clone $reward;
+$formdata->description_editor = [
+    'text' => $reward->description ?? '',
+    'format' => FORMAT_HTML
+];
+
+// Prepare file area for existing reward.
+$draftitemid = file_get_submitted_draft_itemid('rewardimage');
+file_prepare_draft_area($draftitemid, $context->id, 'local_points', 'rewardimage',
+    $id ? $id : null, $filemanageroptions);
+$formdata->rewardimage = $draftitemid;
+
+$mform->set_data($formdata);
 
 // Handle form submission.
 if ($mform->is_cancelled()) {
@@ -156,7 +174,6 @@ if ($mform->is_cancelled()) {
     $record->description = $data->description_editor['text'];
     $record->cost = $data->cost;
     $record->quantity = ($data->quantity !== '' && $data->quantity !== null) ? $data->quantity : null;
-    $record->image = $data->image;
     $record->enabled = $data->enabled;
     $record->availablefrom = $data->availablefrom ? $data->availablefrom : null;
     $record->availableuntil = $data->availableuntil ? $data->availableuntil : null;
@@ -164,13 +181,31 @@ if ($mform->is_cancelled()) {
 
     if ($data->id) {
         $record->id = $data->id;
+        $rewardid = $data->id;
         $DB->update_record('local_points_rewards', $record);
         $message = get_string('rewardupdated', 'local_points');
     } else {
         $record->timecreated = $now;
-        $DB->insert_record('local_points_rewards', $record);
+        $record->image = ''; // Will be updated after getting file.
+        $rewardid = $DB->insert_record('local_points_rewards', $record);
         $message = get_string('rewardcreated', 'local_points');
     }
+
+    // Save the file.
+    file_save_draft_area_files($data->rewardimage, $context->id, 'local_points', 'rewardimage',
+        $rewardid, $filemanageroptions);
+
+    // Get the filename and update record.
+    $fs = get_file_storage();
+    $files = $fs->get_area_files($context->id, 'local_points', 'rewardimage', $rewardid, 'itemid', false);
+    $filename = '';
+    if (!empty($files)) {
+        $file = reset($files);
+        $filename = $file->get_filename();
+    }
+
+    // Update image filename in database.
+    $DB->set_field('local_points_rewards', 'image', $filename, ['id' => $rewardid]);
 
     redirect(new moodle_url('/local/points/store/manage.php'), $message, null, \core\output\notification::NOTIFY_SUCCESS);
 }

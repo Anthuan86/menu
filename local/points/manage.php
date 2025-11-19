@@ -227,6 +227,15 @@ if (has_capability('local/points:managerules', $context) ||
         get_string('managerules', 'local_points'),
         ['class' => 'btn btn-primary mr-2']
     );
+
+    // Link to store management (only global context).
+    if (!$courseid) {
+        echo html_writer::link(
+            new moodle_url('/local/points/store/manage.php'),
+            get_string('managerewards', 'local_points'),
+            ['class' => 'btn btn-success mr-2']
+        );
+    }
 }
 
 // Link to report.
