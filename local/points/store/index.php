@@ -25,6 +25,7 @@
 require_once(__DIR__ . '/../../../config.php');
 
 $categoryid = optional_param('category', 0, PARAM_INT);
+$sort = optional_param('sort', 'popular', PARAM_ALPHA);
 
 require_login();
 
@@ -47,188 +48,430 @@ $userpoints = $userpoints ? $userpoints : 0;
 
 echo $OUTPUT->header();
 
-// Custom CSS for better visualization.
+// Professional e-commerce CSS.
 echo '<style>
-.points-store-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 15px;
-    padding: 30px;
+/* Store Container */
+.points-store {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Hero Banner */
+.store-hero {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+    border-radius: 20px;
+    padding: 40px;
     margin-bottom: 30px;
     color: white;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-}
-.points-store-header .points-value {
-    font-size: 4rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-}
-.reward-card {
-    border: none;
-    border-radius: 15px;
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
 }
-.reward-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+.store-hero::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
 }
-.reward-card .card-img-top {
-    height: 220px;
-    object-fit: cover;
+.store-hero .points-display {
+    position: relative;
+    z-index: 1;
 }
-.reward-card .placeholder-img {
-    height: 220px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.store-hero .points-amount {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
 }
-.reward-card .card-body {
-    padding: 20px;
+.store-hero .points-label {
+    font-size: 1.2rem;
+    opacity: 0.9;
 }
-.reward-card .card-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+.store-hero .hero-actions {
+    margin-top: 20px;
 }
-.reward-card .cost-badge {
-    display: inline-block;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-.cost-affordable {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    color: white;
-}
-.cost-expensive {
-    background: #f8f9fa;
-    color: #6c757d;
-}
-.reward-card .card-footer {
-    background: transparent;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    padding: 15px 20px;
-}
-.reward-card .btn-redeem {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
+.store-hero .hero-actions .btn {
+    margin-right: 10px;
     border-radius: 25px;
     padding: 10px 25px;
     font-weight: 600;
-    transition: all 0.3s ease;
 }
-.reward-card .btn-redeem:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-.stock-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0,0,0,0.7);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-size: 0.75rem;
-}
-.category-pills .nav-link {
-    border-radius: 25px;
-    padding: 8px 20px;
-    margin: 0 5px 10px 0;
-    font-weight: 500;
-    color: #495057;
+
+/* Store Navigation */
+.store-nav {
     background: #f8f9fa;
-    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
 }
-.category-pills .nav-link.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.store-nav .nav-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.store-nav .category-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 2px solid #e9ecef;
+    background: white;
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+.store-nav .category-btn:hover {
+    border-color: #2a5298;
+    color: #2a5298;
+}
+.store-nav .category-btn.active {
+    background: #2a5298;
+    border-color: #2a5298;
     color: white;
+}
+.store-nav .sort-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.store-nav .sort-options select {
+    border-radius: 10px;
+    padding: 8px 15px;
+    border: 2px solid #e9ecef;
+}
+
+/* Product Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Product Card */
+.product-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: all 0.4s ease;
+    position: relative;
+}
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* Product Image */
+.product-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+.product-card:hover .product-image img {
+    transform: scale(1.1);
+}
+.product-image .placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+}
+.product-image .placeholder i {
+    font-size: 4rem;
+    color: #cbd5e0;
+}
+
+/* Product Badges */
+.product-badges {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.badge-stock {
+    background: rgba(0,0,0,0.75);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.badge-hot {
+    background: #ff4757;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Quick View Overlay */
+.quick-view {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(42, 82, 152, 0.95);
+    padding: 15px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+.product-card:hover .quick-view {
+    transform: translateY(0);
+}
+.quick-view .btn {
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* Product Info */
+.product-info {
+    padding: 20px;
+}
+.product-category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #2a5298;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+.product-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+.product-description {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+/* Product Price */
+.product-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+.price-amount {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2a5298;
+}
+.price-amount small {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.price-status {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: 600;
+}
+.price-status.affordable {
+    background: #d4edda;
+    color: #155724;
+}
+.price-status.expensive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+}
+.empty-state i {
+    font-size: 5rem;
+    color: #e2e8f0;
+    margin-bottom: 20px;
+}
+.empty-state h3 {
+    color: #4a5568;
+    margin-bottom: 10px;
+}
+.empty-state p {
+    color: #718096;
+}
+
+/* Footer Navigation */
+.store-footer {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #f0f0f0;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .store-hero {
+        padding: 25px;
+    }
+    .store-hero .points-amount {
+        font-size: 2.5rem;
+    }
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
 }
 </style>';
 
-// User's points display - improved header.
-echo html_writer::start_div('points-store-header text-center');
-echo html_writer::tag('div', get_string('yourpoints', 'local_points'), ['class' => 'mb-2 opacity-75']);
-echo html_writer::tag('div', number_format($userpoints), ['class' => 'points-value']);
-echo html_writer::tag('div', get_string('points', 'local_points'), ['class' => 'mb-3 opacity-75']);
+echo '<div class="points-store">';
+
+// Hero Banner.
+echo '<div class="store-hero">';
+echo '<div class="row align-items-center">';
+echo '<div class="col-md-8">';
+echo '<div class="points-display">';
+echo '<div class="points-label">' . get_string('yourpoints', 'local_points') . '</div>';
+echo '<div class="points-amount">' . number_format($userpoints) . ' <small>pts</small></div>';
+echo '</div>';
+echo '<div class="hero-actions">';
 echo html_writer::link(
     new moodle_url('/local/points/store/history.php'),
-    get_string('myredemptions', 'local_points'),
-    ['class' => 'btn btn-light btn-sm']
+    '<i class="fa fa-history"></i> ' . get_string('myredemptions', 'local_points'),
+    ['class' => 'btn btn-light']
 );
-echo html_writer::end_div();
+echo html_writer::link(
+    new moodle_url('/local/points/view.php'),
+    '<i class="fa fa-chart-line"></i> ' . get_string('viewhistory', 'local_points'),
+    ['class' => 'btn btn-outline-light']
+);
+echo '</div>';
+echo '</div>';
+echo '</div>';
+echo '</div>';
 
-// Categories pills.
+// Store Navigation.
+echo '<div class="store-nav">';
+
+// Categories.
 $categories = $DB->get_records('local_points_reward_categories', ['visible' => 1], 'sortorder ASC');
 
-if (!empty($categories)) {
-    echo html_writer::start_tag('ul', ['class' => 'nav category-pills mb-4 justify-content-center flex-wrap']);
+echo '<div class="nav-categories">';
+$activeclass = $categoryid == 0 ? ' active' : '';
+echo html_writer::link(
+    new moodle_url('/local/points/store/index.php'),
+    get_string('allcategories', 'local_points'),
+    ['class' => 'category-btn' . $activeclass]
+);
 
-    // All categories tab.
-    $activeclass = $categoryid == 0 ? ' active' : '';
-    echo html_writer::start_tag('li', ['class' => 'nav-item']);
+foreach ($categories as $category) {
+    $activeclass = $categoryid == $category->id ? ' active' : '';
     echo html_writer::link(
-        new moodle_url('/local/points/store/index.php'),
-        get_string('allcategories', 'local_points'),
-        ['class' => 'nav-link' . $activeclass]
+        new moodle_url('/local/points/store/index.php', ['category' => $category->id]),
+        format_string($category->name),
+        ['class' => 'category-btn' . $activeclass]
     );
-    echo html_writer::end_tag('li');
-
-    foreach ($categories as $category) {
-        $activeclass = $categoryid == $category->id ? ' active' : '';
-        echo html_writer::start_tag('li', ['class' => 'nav-item']);
-        echo html_writer::link(
-            new moodle_url('/local/points/store/index.php', ['category' => $category->id]),
-            format_string($category->name),
-            ['class' => 'nav-link' . $activeclass]
-        );
-        echo html_writer::end_tag('li');
-    }
-
-    echo html_writer::end_tag('ul');
 }
+echo '</div>';
+
+// Sort options.
+echo '<div class="sort-options">';
+echo '<label>' . get_string('sortby', 'local_points') . ':</label>';
+echo '<select onchange="window.location.href=this.value">';
+$sorturl = new moodle_url('/local/points/store/index.php', ['category' => $categoryid, 'sort' => 'popular']);
+echo '<option value="' . $sorturl . '"' . ($sort == 'popular' ? ' selected' : '') . '>' . get_string('popular', 'local_points') . '</option>';
+$sorturl = new moodle_url('/local/points/store/index.php', ['category' => $categoryid, 'sort' => 'pricelow']);
+echo '<option value="' . $sorturl . '"' . ($sort == 'pricelow' ? ' selected' : '') . '>' . get_string('pricelowtohigh', 'local_points') . '</option>';
+$sorturl = new moodle_url('/local/points/store/index.php', ['category' => $categoryid, 'sort' => 'pricehigh']);
+echo '<option value="' . $sorturl . '"' . ($sort == 'pricehigh' ? ' selected' : '') . '>' . get_string('pricehightolow', 'local_points') . '</option>';
+$sorturl = new moodle_url('/local/points/store/index.php', ['category' => $categoryid, 'sort' => 'newest']);
+echo '<option value="' . $sorturl . '"' . ($sort == 'newest' ? ' selected' : '') . '>' . get_string('newest', 'local_points') . '</option>';
+echo '</select>';
+echo '</div>';
+
+echo '</div>';
 
 // Get available rewards.
 $now = time();
 $params = ['enabled' => 1];
 $where = 'enabled = :enabled';
-
-// Filter by availability dates.
 $where .= ' AND (availablefrom IS NULL OR availablefrom = 0 OR availablefrom <= :now1)';
 $where .= ' AND (availableuntil IS NULL OR availableuntil = 0 OR availableuntil >= :now2)';
 $params['now1'] = $now;
 $params['now2'] = $now;
 
-// Filter by category.
 if ($categoryid > 0) {
     $where .= ' AND categoryid = :categoryid';
     $params['categoryid'] = $categoryid;
 }
 
-// Filter by stock.
 $where .= ' AND (quantity IS NULL OR quantity > 0)';
 
-$rewards = $DB->get_records_select('local_points_rewards', $where, $params, 'cost ASC, name ASC');
+// Sort order.
+switch ($sort) {
+    case 'pricelow':
+        $orderby = 'cost ASC, name ASC';
+        break;
+    case 'pricehigh':
+        $orderby = 'cost DESC, name ASC';
+        break;
+    case 'newest':
+        $orderby = 'timecreated DESC, name ASC';
+        break;
+    default: // popular
+        $orderby = 'cost ASC, name ASC';
+}
+
+$rewards = $DB->get_records_select('local_points_rewards', $where, $params, $orderby);
 
 if (empty($rewards)) {
-    echo html_writer::start_div('text-center py-5');
-    echo html_writer::tag('i', '', ['class' => 'fa fa-gift fa-4x text-muted mb-3']);
-    echo html_writer::tag('h4', get_string('norewardsavailable', 'local_points'), ['class' => 'text-muted']);
-    echo html_writer::end_div();
+    echo '<div class="empty-state">';
+    echo '<i class="fa fa-shopping-bag"></i>';
+    echo '<h3>' . get_string('norewardsavailable', 'local_points') . '</h3>';
+    echo '<p>' . get_string('checkbacklater', 'local_points') . '</p>';
+    echo '</div>';
 } else {
-    echo html_writer::start_div('row');
+    echo '<div class="products-grid">';
 
     foreach ($rewards as $reward) {
-        echo html_writer::start_div('col-lg-4 col-md-6 mb-4');
-        echo html_writer::start_div('card reward-card h-100');
+        // Get category name.
+        $catname = '';
+        if ($reward->categoryid && isset($categories[$reward->categoryid])) {
+            $catname = $categories[$reward->categoryid]->name;
+        }
 
-        // Card image container.
-        echo html_writer::start_div('position-relative');
+        // Get redemption count for popularity.
+        $redemptions = $DB->count_records('local_points_redemptions', ['rewardid' => $reward->id]);
 
-        // Reward image.
+        echo '<div class="product-card">';
+
+        // Product image.
+        echo '<div class="product-image">';
+
+        // Badges.
+        echo '<div class="product-badges">';
+        if ($reward->quantity !== null && $reward->quantity <= 5) {
+            echo '<span class="badge-stock">' . get_string('only', 'local_points') . ' ' . $reward->quantity . ' ' . get_string('left', 'local_points') . '</span>';
+        } else {
+            echo '<span></span>';
+        }
+        if ($redemptions >= 5) {
+            echo '<span class="badge-hot"><i class="fa fa-fire"></i> ' . get_string('popular', 'local_points') . '</span>';
+        }
+        echo '</div>';
+
         if (!empty($reward->image)) {
             $imageurl = moodle_url::make_pluginfile_url(
                 $context->id,
@@ -238,72 +481,65 @@ if (empty($rewards)) {
                 '/',
                 $reward->image
             );
-            echo html_writer::img($imageurl, format_string($reward->name), [
-                'class' => 'card-img-top'
-            ]);
+            echo html_writer::img($imageurl, format_string($reward->name));
         } else {
-            // Placeholder image.
-            echo html_writer::start_div('placeholder-img');
-            echo html_writer::tag('i', '', ['class' => 'fa fa-gift fa-4x text-muted']);
-            echo html_writer::end_div();
+            echo '<div class="placeholder"><i class="fa fa-gift"></i></div>';
         }
 
-        // Stock badge.
-        if ($reward->quantity !== null) {
-            echo html_writer::tag('span',
-                get_string('stockremaining', 'local_points', $reward->quantity),
-                ['class' => 'stock-badge']
-            );
+        // Quick view overlay.
+        echo '<div class="quick-view">';
+        echo html_writer::link(
+            new moodle_url('/local/points/store/detail.php', ['id' => $reward->id]),
+            '<i class="fa fa-eye"></i> ' . get_string('viewdetails', 'local_points'),
+            ['class' => 'btn btn-light']
+        );
+        echo '</div>';
+
+        echo '</div>';
+
+        // Product info.
+        echo '<div class="product-info">';
+
+        if ($catname) {
+            echo '<div class="product-category">' . format_string($catname) . '</div>';
         }
 
-        echo html_writer::end_div(); // position-relative
-
-        echo html_writer::start_div('card-body');
-        echo html_writer::tag('h5', format_string($reward->name), ['class' => 'card-title']);
+        echo '<div class="product-name">' . format_string($reward->name) . '</div>';
 
         if (!empty($reward->description)) {
-            $shortdesc = shorten_text(strip_tags($reward->description), 80);
-            echo html_writer::tag('p', $shortdesc, ['class' => 'card-text text-muted small mb-3']);
+            $shortdesc = shorten_text(strip_tags($reward->description), 60);
+            echo '<div class="product-description">' . $shortdesc . '</div>';
         }
 
-        // Cost badge.
-        $costclass = $userpoints >= $reward->cost ? 'cost-affordable' : 'cost-expensive';
-        echo html_writer::tag('span', number_format($reward->cost) . ' pts', ['class' => 'cost-badge ' . $costclass]);
-
-        echo html_writer::end_div();
-
-        // Card footer with action button.
-        echo html_writer::start_div('card-footer');
+        // Price.
+        echo '<div class="product-price">';
+        echo '<div class="price-amount">' . number_format($reward->cost) . ' <small>pts</small></div>';
 
         if ($userpoints >= $reward->cost) {
-            echo html_writer::link(
-                new moodle_url('/local/points/store/detail.php', ['id' => $reward->id]),
-                get_string('viewdetails', 'local_points'),
-                ['class' => 'btn btn-redeem btn-block text-white']
-            );
+            echo '<span class="price-status affordable"><i class="fa fa-check"></i> ' . get_string('available', 'local_points') . '</span>';
         } else {
-            $pointsneeded = $reward->cost - $userpoints;
-            echo html_writer::tag('div',
-                get_string('needmorepoints', 'local_points', number_format($pointsneeded)),
-                ['class' => 'text-muted text-center small']
-            );
+            $needed = $reward->cost - $userpoints;
+            echo '<span class="price-status expensive">' . get_string('need', 'local_points') . ' ' . number_format($needed) . '</span>';
         }
 
-        echo html_writer::end_div();
-        echo html_writer::end_div();
-        echo html_writer::end_div();
+        echo '</div>';
+        echo '</div>';
+
+        echo '</div>';
     }
 
-    echo html_writer::end_div();
+    echo '</div>';
 }
 
-// Navigation links.
-echo html_writer::start_div('mt-4 text-center');
+// Footer.
+echo '<div class="store-footer">';
 echo html_writer::link(
     new moodle_url('/local/points/view.php'),
-    get_string('backtooverview', 'local_points'),
-    ['class' => 'btn btn-secondary']
+    '<i class="fa fa-arrow-left"></i> ' . get_string('backtooverview', 'local_points'),
+    ['class' => 'btn btn-outline-secondary']
 );
-echo html_writer::end_div();
+echo '</div>';
+
+echo '</div>'; // points-store
 
 echo $OUTPUT->footer();

@@ -278,3 +278,15 @@ $string['confirmdelete'] = '¿Está seguro de que desea eliminar este elemento?'
 // Store navigation.
 $string['backtostore'] = 'Volver a la Tienda';
 $string['viewdetails'] = 'Ver Detalles';
+
+// Store sorting and labels.
+$string['sortby'] = 'Ordenar por';
+$string['popular'] = 'Popular';
+$string['pricelowtohigh'] = 'Precio: Menor a Mayor';
+$string['pricehightolow'] = 'Precio: Mayor a Menor';
+$string['newest'] = 'Más Recientes';
+$string['checkbacklater'] = 'Vuelve más tarde para nuevas recompensas';
+$string['only'] = 'Solo';
+$string['left'] = 'disponibles';
+$string['available'] = 'Disponible';
+$string['need'] = 'Faltan';

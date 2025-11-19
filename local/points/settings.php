@@ -142,4 +142,28 @@ if ($hassiteconfig) {
         new moodle_url('/local/points/report.php'),
         'local/points:viewall'
     ));
+
+    // Add store management page.
+    $ADMIN->add('localplugins', new admin_externalpage(
+        'local_points_store',
+        get_string('managerewards', 'local_points'),
+        new moodle_url('/local/points/store/manage.php'),
+        'local/points:managerules'
+    ));
+
+    // Add categories management page.
+    $ADMIN->add('localplugins', new admin_externalpage(
+        'local_points_categories',
+        get_string('managecategories', 'local_points'),
+        new moodle_url('/local/points/store/manage_categories.php'),
+        'local/points:managerules'
+    ));
+
+    // Add redemptions management page.
+    $ADMIN->add('localplugins', new admin_externalpage(
+        'local_points_redemptions',
+        get_string('manageredemptions', 'local_points'),
+        new moodle_url('/local/points/store/manage_redemptions.php'),
+        'local/points:managerules'
+    ));
 }
