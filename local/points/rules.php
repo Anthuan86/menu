@@ -84,25 +84,30 @@ class rule_form extends moodleform {
             }
         }
 
-        if (!$courseid) {
-            $mform->addElement('select', 'courseid', get_string('rulecourse', 'local_points'), $courseoptions);
-        } else {
-            $mform->addElement('select', 'courseid', get_string('rulecourse', 'local_points'), $courseoptions);
-            $mform->setDefault('courseid', $courseid);
+        // Get the selected course from form data or URL parameter.
+        $selectedcourseid = $rule ? $rule->courseid : $courseid;
+
+        $courseattrs = ['id' => 'id_courseid', 'onchange' => 'this.form.submit();'];
+        $mform->addElement('select', 'courseid', get_string('rulecourse', 'local_points'), $courseoptions, $courseattrs);
+        if ($selectedcourseid) {
+            $mform->setDefault('courseid', $selectedcourseid);
         }
 
-        // Activity selector (populated via AJAX based on course selection).
+        // Activity selector - load activities from selected course.
         global $DB;
         $activityoptions = ['' => get_string('allactivities', 'local_points')];
 
-        // Pre-populate activities if editing an existing rule with a course.
-        $editingcourseid = $rule ? $rule->courseid : $courseid;
-        if ($editingcourseid) {
-            $modinfo = get_fast_modinfo($editingcourseid);
-            foreach ($modinfo->cms as $cm) {
-                if ($cm->uservisible) {
-                    $activityoptions[$cm->id] = $cm->name . ' (' . $cm->modname . ')';
+        // Load activities if a course is selected.
+        if ($selectedcourseid) {
+            try {
+                $modinfo = get_fast_modinfo($selectedcourseid);
+                foreach ($modinfo->cms as $cm) {
+                    if ($cm->uservisible && $cm->deletioninprogress == 0) {
+                        $activityoptions[$cm->id] = $cm->name . ' (' . $cm->modname . ')';
+                    }
                 }
+            } catch (Exception $e) {
+                // Course might not exist or be accessible.
             }
         }
 
@@ -191,10 +196,16 @@ if ($action === 'edit' && $ruleid) {
     $rule = $DB->get_record('local_points_rules', ['id' => $ruleid], '*', MUST_EXIST);
 }
 
-// Create form.
+// Check if course was changed (form submitted to reload activities).
+$formcourseid = optional_param('courseid', null, PARAM_INT);
+if ($formcourseid && !$courseid) {
+    $courseid = $formcourseid;
+}
+
+// Create form with the current course context.
 $mform = new rule_form(null, ['rule' => $rule, 'courseid' => $courseid]);
 
-// Set existing data.
+// Set existing data or preserve form data on course change.
 if ($rule) {
     $formdata = clone $rule;
 
@@ -206,6 +217,18 @@ if ($rule) {
         }
     }
 
+    $mform->set_data($formdata);
+} else if ($formcourseid) {
+    // Preserve form data when course is changed.
+    $formdata = new stdClass();
+    $formdata->name = optional_param('name', '', PARAM_TEXT);
+    $formdata->description = optional_param('description', '', PARAM_TEXT);
+    $formdata->eventname = optional_param('eventname', '', PARAM_TEXT);
+    $formdata->points = optional_param('points', 10, PARAM_INT);
+    $formdata->courseid = $formcourseid;
+    $formdata->enabled = optional_param('enabled', 1, PARAM_INT);
+    $formdata->maxawards = optional_param('maxawards', '', PARAM_INT);
+    $formdata->condition_min_grade = optional_param('condition_min_grade', '', PARAM_INT);
     $mform->set_data($formdata);
 }
 
