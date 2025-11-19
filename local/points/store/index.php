@@ -58,7 +58,7 @@ echo '<style>
 
 /* Hero Banner */
 .store-hero {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+    background: linear-gradient(135deg, #d20a11 0%, #8b0000 50%, #d20a11 100%);
     border-radius: 20px;
     padding: 40px;
     margin-bottom: 30px;
@@ -122,12 +122,12 @@ echo '<style>
     text-decoration: none;
 }
 .store-nav .category-btn:hover {
-    border-color: #2a5298;
-    color: #2a5298;
+    border-color: #d20a11;
+    color: #d20a11;
 }
 .store-nav .category-btn.active {
-    background: #2a5298;
-    border-color: #2a5298;
+    background: #d20a11;
+    border-color: #d20a11;
     color: white;
 }
 .store-nav .sort-options {
@@ -209,7 +209,7 @@ echo '<style>
     font-weight: 600;
 }
 .badge-hot {
-    background: #ff4757;
+    background: #d20a11;
     color: white;
     padding: 6px 12px;
     border-radius: 8px;
@@ -223,7 +223,7 @@ echo '<style>
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(42, 82, 152, 0.95);
+    background: rgba(210, 10, 17, 0.95);
     padding: 15px;
     transform: translateY(100%);
     transition: transform 0.3s ease;
@@ -244,7 +244,7 @@ echo '<style>
 .product-category {
     font-size: 0.75rem;
     text-transform: uppercase;
-    color: #2a5298;
+    color: #d20a11;
     font-weight: 600;
     letter-spacing: 1px;
     margin-bottom: 8px;
@@ -274,7 +274,7 @@ echo '<style>
 .price-amount {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #2a5298;
+    color: #d20a11;
 }
 .price-amount small {
     font-size: 0.8rem;

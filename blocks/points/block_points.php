@@ -73,7 +73,7 @@ class block_points extends block_base {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
         .points-block-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #d20a11 0%, #8b0000 100%);
             border-radius: 12px;
             padding: 20px;
             color: white;
@@ -160,7 +160,7 @@ class block_points extends block_base {
         .reward-card-mini .cost-value {
             font-weight: 700;
             font-size: 1.1rem;
-            color: #667eea;
+            color: #d20a11;
         }
         .reward-card-mini .cost-value small {
             font-size: 0.7rem;
@@ -170,13 +170,13 @@ class block_points extends block_base {
             font-size: 0.7rem;
             padding: 4px 10px;
             border-radius: 15px;
-            background: #667eea;
+            background: #d20a11;
             color: white;
             text-decoration: none;
             font-weight: 600;
         }
         .reward-card-mini .btn-view:hover {
-            background: #764ba2;
+            background: #8b0000;
             color: white;
         }
 
@@ -200,8 +200,8 @@ class block_points extends block_base {
             transition: all 0.3s ease;
         }
         .carousel-nav button:hover {
-            border-color: #667eea;
-            color: #667eea;
+            border-color: #d20a11;
+            color: #d20a11;
         }
         .carousel-nav button i {
             font-size: 0.8rem;
@@ -223,7 +223,7 @@ class block_points extends block_base {
             transition: all 0.3s ease;
         }
         .carousel-dot.active {
-            background: #667eea;
+            background: #d20a11;
             width: 20px;
             border-radius: 4px;
         }
@@ -243,7 +243,7 @@ class block_points extends block_base {
             text-decoration: none;
         }
         .points-block-actions .btn-store {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #d20a11 0%, #8b0000 100%);
             color: white;
         }
         .points-block-actions .btn-store:hover {
