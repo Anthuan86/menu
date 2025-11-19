@@ -101,17 +101,23 @@ if ($table->is_downloading()) {
     echo html_writer::select($rules, 'ruleid', $ruleid, null, ['class' => 'form-control', 'id' => 'ruleid']);
     echo html_writer::end_div();
 
-    // User filter (autocomplete would be better but this is simpler).
+    // User filter - dropdown with users who have points.
     echo html_writer::start_div('col-md-3 mb-2');
-    echo html_writer::label(get_string('userid', 'local_points'), 'userid', true, ['class' => 'd-block']);
-    echo html_writer::empty_tag('input', [
-        'type' => 'number',
-        'name' => 'userid',
-        'id' => 'userid',
-        'value' => $userid ?: '',
-        'class' => 'form-control',
-        'placeholder' => get_string('userid', 'local_points'),
-    ]);
+
+    // Get users who have points in history.
+    $usersql = "SELECT DISTINCT u.id, u.firstname, u.lastname, u.email
+                FROM {user} u
+                JOIN {local_points_history} h ON h.userid = u.id
+                ORDER BY u.lastname, u.firstname";
+    $userswitpoints = $DB->get_records_sql($usersql);
+
+    $useroptions = [0 => get_string('allusers', 'local_points')];
+    foreach ($userswitpoints as $u) {
+        $useroptions[$u->id] = fullname($u);
+    }
+
+    echo html_writer::label(get_string('user', 'local_points'), 'userid', true, ['class' => 'd-block']);
+    echo html_writer::select($useroptions, 'userid', $userid, null, ['class' => 'form-control', 'id' => 'userid']);
     echo html_writer::end_div();
 
     // Course filter (if not already filtered).

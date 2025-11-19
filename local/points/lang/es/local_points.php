@@ -173,6 +173,7 @@ $string['filters'] = 'Filtros';
 $string['filter'] = 'Filtrar';
 $string['reset'] = 'Reiniciar';
 $string['allrules'] = 'Todas las reglas';
+$string['allusers'] = 'Todos los usuarios';
 $string['userid'] = 'ID de Usuario';
 $string['awardedby'] = 'Otorgado por';
 $string['system'] = 'Sistema';
