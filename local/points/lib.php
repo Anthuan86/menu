@@ -46,6 +46,16 @@ function local_points_extend_navigation(global_navigation $navigation) {
             'local_points_mypoints',
             new pix_icon('i/grades', '')
         );
+
+        // Add store link.
+        $navigation->add(
+            get_string('store', 'local_points'),
+            new moodle_url('/local/points/store/index.php'),
+            navigation_node::TYPE_CUSTOM,
+            null,
+            'local_points_store',
+            new pix_icon('i/cart', '')
+        );
     }
 }
 
@@ -234,5 +244,29 @@ function local_points_myprofile_navigation(\core_user\output\myprofile\tree $tre
  * @return bool
  */
 function local_points_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
+    global $DB;
+
+    if ($context->contextlevel != CONTEXT_SYSTEM) {
+        return false;
+    }
+
+    require_login();
+
+    if ($filearea === 'rewardimage') {
+        $itemid = array_shift($args);
+        $filename = array_pop($args);
+        $filepath = $args ? '/' . implode('/', $args) . '/' : '/';
+
+        $fs = get_file_storage();
+        $file = $fs->get_file($context->id, 'local_points', $filearea, $itemid, $filepath, $filename);
+
+        if (!$file || $file->is_directory()) {
+            return false;
+        }
+
+        send_stored_file($file, 0, 0, $forcedownload, $options);
+        return true;
+    }
+
     return false;
 }

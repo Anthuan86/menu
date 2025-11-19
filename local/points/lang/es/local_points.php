@@ -190,3 +190,91 @@ $string['ruleappliedtimes'] = 'Aplicada {$a} veces';
 $string['lastaward'] = 'Último otorgamiento';
 $string['rulestats'] = 'Estadísticas de Reglas';
 $string['noawardsyet'] = 'Sin otorgamientos aún';
+
+// Store.
+$string['store'] = 'Tienda de Recompensas';
+$string['rewards'] = 'Recompensas';
+$string['reward'] = 'Recompensa';
+$string['managerewards'] = 'Administrar Recompensas';
+$string['addreward'] = 'Agregar Recompensa';
+$string['editreward'] = 'Editar Recompensa';
+$string['rewardcreated'] = 'Recompensa creada exitosamente';
+$string['rewardupdated'] = 'Recompensa actualizada exitosamente';
+$string['rewarddeleted'] = 'Recompensa eliminada';
+$string['rewarddisabled'] = 'Recompensa deshabilitada (tiene canjes)';
+$string['norewards'] = 'No hay recompensas definidas';
+$string['norewardsavailable'] = 'No hay recompensas disponibles en este momento';
+
+// Categories.
+$string['category'] = 'Categoría';
+$string['categories'] = 'Categorías';
+$string['managecategories'] = 'Administrar Categorías';
+$string['addcategory'] = 'Agregar Categoría';
+$string['editcategory'] = 'Editar Categoría';
+$string['categorycreated'] = 'Categoría creada exitosamente';
+$string['categoryupdated'] = 'Categoría actualizada exitosamente';
+$string['categorydeleted'] = 'Categoría eliminada';
+$string['categoryhasrewards'] = 'No se puede eliminar categoría con recompensas';
+$string['nocategories'] = 'No hay categorías definidas';
+$string['nocategory'] = 'Sin categoría';
+$string['allcategories'] = 'Todas las categorías';
+
+// Redemptions.
+$string['redemptions'] = 'Canjes';
+$string['redemption'] = 'Canje';
+$string['manageredemptions'] = 'Administrar Canjes';
+$string['myredemptions'] = 'Mis Canjes';
+$string['redeem'] = 'Canjear';
+$string['redeemnow'] = 'Canjear Ahora';
+$string['redeemreward'] = 'Canjear Recompensa';
+$string['redeemedreward'] = 'Canjeado: {$a}';
+$string['confirmredemption'] = 'Confirmar Canje';
+$string['confirmredemptionmessage'] = 'Esta acción no se puede deshacer. Tus puntos serán deducidos inmediatamente.';
+$string['redemptionconfirmed'] = 'Canje Confirmado';
+$string['redemptionsuccess'] = '¡Tu canje ha sido enviado!';
+$string['redemptionpendingmessage'] = 'Tu canje está pendiente de aprobación. Serás notificado cuando sea procesado.';
+$string['redemptionerror'] = 'Ocurrió un error durante el canje';
+$string['noredemptions'] = 'No se encontraron canjes';
+
+// Redemption statuses.
+$string['status_pending'] = 'Pendiente';
+$string['status_approved'] = 'Aprobado';
+$string['status_rejected'] = 'Rechazado';
+$string['status_delivered'] = 'Entregado';
+$string['statusupdated'] = 'Estado actualizado exitosamente';
+
+// Redemption actions.
+$string['approve'] = 'Aprobar';
+$string['reject'] = 'Rechazar';
+$string['markdelivered'] = 'Marcar como Entregado';
+$string['redemptionrejectedrefund'] = 'Reembolso por canje rechazado';
+
+// Store fields.
+$string['cost'] = 'Costo (Puntos)';
+$string['cost_help'] = 'Número de puntos requeridos para canjear esta recompensa';
+$string['stock'] = 'Stock';
+$string['stock_help'] = 'Cantidad disponible. Dejar vacío para ilimitado.';
+$string['stockremaining'] = '{$a} disponibles';
+$string['unlimited'] = 'Ilimitado';
+$string['image'] = 'Imagen';
+$string['image_help'] = 'Nombre del archivo de imagen para la recompensa';
+$string['availablefrom'] = 'Disponible desde';
+$string['availableuntil'] = 'Disponible hasta';
+$string['pointsspent'] = 'Puntos Gastados';
+$string['remaining'] = 'Restante después del canje';
+
+// Store errors.
+$string['insufficientpoints'] = 'No tienes suficientes puntos para esta recompensa';
+$string['needmorepoints'] = 'Necesitas {$a} puntos más';
+$string['rewardnotenabled'] = 'Esta recompensa no está disponible';
+$string['rewardnotavailableyet'] = 'Esta recompensa aún no está disponible';
+$string['rewardexpired'] = 'Esta recompensa ya no está disponible';
+$string['rewardoutofstock'] = 'Esta recompensa está agotada';
+$string['notavailable'] = 'No Disponible';
+$string['invalidcost'] = 'Valor de costo inválido';
+$string['invalidquantity'] = 'Valor de cantidad inválido';
+$string['confirmdelete'] = '¿Está seguro de que desea eliminar este elemento?';
+
+// Store navigation.
+$string['backtostore'] = 'Volver a la Tienda';
+$string['viewdetails'] = 'Ver Detalles';

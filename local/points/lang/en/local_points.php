@@ -190,3 +190,91 @@ $string['ruleappliedtimes'] = 'Applied {$a} times';
 $string['lastaward'] = 'Last award';
 $string['rulestats'] = 'Rule Statistics';
 $string['noawardsyet'] = 'No awards yet';
+
+// Store.
+$string['store'] = 'Rewards Store';
+$string['rewards'] = 'Rewards';
+$string['reward'] = 'Reward';
+$string['managerewards'] = 'Manage Rewards';
+$string['addreward'] = 'Add Reward';
+$string['editreward'] = 'Edit Reward';
+$string['rewardcreated'] = 'Reward created successfully';
+$string['rewardupdated'] = 'Reward updated successfully';
+$string['rewarddeleted'] = 'Reward deleted';
+$string['rewarddisabled'] = 'Reward has been disabled (has redemptions)';
+$string['norewards'] = 'No rewards defined';
+$string['norewardsavailable'] = 'No rewards available at this time';
+
+// Categories.
+$string['category'] = 'Category';
+$string['categories'] = 'Categories';
+$string['managecategories'] = 'Manage Categories';
+$string['addcategory'] = 'Add Category';
+$string['editcategory'] = 'Edit Category';
+$string['categorycreated'] = 'Category created successfully';
+$string['categoryupdated'] = 'Category updated successfully';
+$string['categorydeleted'] = 'Category deleted';
+$string['categoryhasrewards'] = 'Cannot delete category with rewards';
+$string['nocategories'] = 'No categories defined';
+$string['nocategory'] = 'No category';
+$string['allcategories'] = 'All categories';
+
+// Redemptions.
+$string['redemptions'] = 'Redemptions';
+$string['redemption'] = 'Redemption';
+$string['manageredemptions'] = 'Manage Redemptions';
+$string['myredemptions'] = 'My Redemptions';
+$string['redeem'] = 'Redeem';
+$string['redeemnow'] = 'Redeem Now';
+$string['redeemreward'] = 'Redeem Reward';
+$string['redeemedreward'] = 'Redeemed: {$a}';
+$string['confirmredemption'] = 'Confirm Redemption';
+$string['confirmredemptionmessage'] = 'This action cannot be undone. Your points will be deducted immediately.';
+$string['redemptionconfirmed'] = 'Redemption Confirmed';
+$string['redemptionsuccess'] = 'Your redemption has been submitted!';
+$string['redemptionpendingmessage'] = 'Your redemption is pending approval. You will be notified when it is processed.';
+$string['redemptionerror'] = 'An error occurred during redemption';
+$string['noredemptions'] = 'No redemptions found';
+
+// Redemption statuses.
+$string['status_pending'] = 'Pending';
+$string['status_approved'] = 'Approved';
+$string['status_rejected'] = 'Rejected';
+$string['status_delivered'] = 'Delivered';
+$string['statusupdated'] = 'Status updated successfully';
+
+// Redemption actions.
+$string['approve'] = 'Approve';
+$string['reject'] = 'Reject';
+$string['markdelivered'] = 'Mark as Delivered';
+$string['redemptionrejectedrefund'] = 'Refund for rejected redemption';
+
+// Store fields.
+$string['cost'] = 'Cost (Points)';
+$string['cost_help'] = 'Number of points required to redeem this reward';
+$string['stock'] = 'Stock';
+$string['stock_help'] = 'Available quantity. Leave empty for unlimited.';
+$string['stockremaining'] = '{$a} remaining';
+$string['unlimited'] = 'Unlimited';
+$string['image'] = 'Image';
+$string['image_help'] = 'Image filename for the reward';
+$string['availablefrom'] = 'Available from';
+$string['availableuntil'] = 'Available until';
+$string['pointsspent'] = 'Points Spent';
+$string['remaining'] = 'Remaining after redemption';
+
+// Store errors.
+$string['insufficientpoints'] = 'You do not have enough points for this reward';
+$string['needmorepoints'] = 'You need {$a} more points';
+$string['rewardnotenabled'] = 'This reward is not available';
+$string['rewardnotavailableyet'] = 'This reward is not available yet';
+$string['rewardexpired'] = 'This reward is no longer available';
+$string['rewardoutofstock'] = 'This reward is out of stock';
+$string['notavailable'] = 'Not Available';
+$string['invalidcost'] = 'Invalid cost value';
+$string['invalidquantity'] = 'Invalid quantity value';
+$string['confirmdelete'] = 'Are you sure you want to delete this item?';
+
+// Store navigation.
+$string['backtostore'] = 'Back to Store';
+$string['viewdetails'] = 'View Details';

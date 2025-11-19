@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024111903;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2024111904;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2022041900;        // Requires Moodle 4.0+.
 $plugin->component = 'local_points';    // Full name of the plugin.
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.3.0';
+$plugin->release   = '1.4.0';
