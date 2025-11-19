@@ -154,3 +154,29 @@ $string['active'] = 'Activo';
 $string['inactive'] = 'Inactivo';
 $string['backtorules'] = 'Volver a reglas';
 $string['backtooverview'] = 'Volver al resumen';
+
+// Task.
+$string['task_process_points'] = 'Procesar asignaciones de puntos';
+
+// Report.
+$string['pointsreport'] = 'Reporte de Puntos';
+$string['filters'] = 'Filtros';
+$string['filter'] = 'Filtrar';
+$string['reset'] = 'Reiniciar';
+$string['allrules'] = 'Todas las reglas';
+$string['userid'] = 'ID de Usuario';
+$string['awardedby'] = 'Otorgado por';
+$string['system'] = 'Sistema';
+$string['totalawards'] = 'Total de Otorgamientos';
+$string['totalpointsawarded'] = 'Total de Puntos Otorgados';
+$string['uniqueusers'] = 'Usuarios Únicos';
+$string['viewreport'] = 'Ver Reporte';
+$string['exportreport'] = 'Exportar Reporte';
+
+// Course admin.
+$string['courserules'] = 'Reglas del Curso';
+$string['globalrules'] = 'Reglas Globales';
+$string['ruleappliedtimes'] = 'Aplicada {$a} veces';
+$string['lastaward'] = 'Último otorgamiento';
+$string['rulestats'] = 'Estadísticas de Reglas';
+$string['noawardsyet'] = 'Sin otorgamientos aún';

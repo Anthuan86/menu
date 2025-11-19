@@ -154,3 +154,29 @@ $string['active'] = 'Active';
 $string['inactive'] = 'Inactive';
 $string['backtorules'] = 'Back to rules';
 $string['backtooverview'] = 'Back to overview';
+
+// Task.
+$string['task_process_points'] = 'Process points assignments';
+
+// Report.
+$string['pointsreport'] = 'Points Report';
+$string['filters'] = 'Filters';
+$string['filter'] = 'Filter';
+$string['reset'] = 'Reset';
+$string['allrules'] = 'All rules';
+$string['userid'] = 'User ID';
+$string['awardedby'] = 'Awarded by';
+$string['system'] = 'System';
+$string['totalawards'] = 'Total Awards';
+$string['totalpointsawarded'] = 'Total Points Awarded';
+$string['uniqueusers'] = 'Unique Users';
+$string['viewreport'] = 'View Report';
+$string['exportreport'] = 'Export Report';
+
+// Course admin.
+$string['courserules'] = 'Course Rules';
+$string['globalrules'] = 'Global Rules';
+$string['ruleappliedtimes'] = 'Applied {$a} times';
+$string['lastaward'] = 'Last award';
+$string['rulestats'] = 'Rule Statistics';
+$string['noawardsyet'] = 'No awards yet';

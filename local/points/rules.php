@@ -239,6 +239,7 @@ if (empty($rules)) {
         get_string('rulename', 'local_points'),
         get_string('ruleevent', 'local_points'),
         get_string('points', 'local_points'),
+        get_string('rulestats', 'local_points'),
         get_string('status', 'local_points'),
         get_string('actions', 'local_points'),
     ];
@@ -259,6 +260,24 @@ if (empty($rules)) {
 
         // Points.
         $row[] = $rule->points;
+
+        // Statistics - count how many times this rule was applied.
+        $awardcount = $DB->count_records('local_points_history', ['ruleid' => $rule->id]);
+        $lastaward = $DB->get_field_sql(
+            "SELECT MAX(timecreated) FROM {local_points_history} WHERE ruleid = ?",
+            [$rule->id]
+        );
+
+        $stats = get_string('ruleappliedtimes', 'local_points', $awardcount);
+        if ($lastaward) {
+            $stats .= html_writer::tag('small',
+                get_string('lastaward', 'local_points') . ': ' . userdate($lastaward, get_string('strftimedateshort', 'langconfig')),
+                ['class' => 'd-block text-muted']
+            );
+        } else {
+            $stats .= html_writer::tag('small', get_string('noawardsyet', 'local_points'), ['class' => 'd-block text-muted']);
+        }
+        $row[] = $stats;
 
         // Status.
         if ($rule->enabled) {

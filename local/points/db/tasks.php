@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for local_points.
+ * Scheduled tasks for local_points.
  *
  * @package    local_points
  * @copyright  2024 Your Name
@@ -24,8 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024111901;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2022041900;        // Requires Moodle 4.0+.
-$plugin->component = 'local_points';    // Full name of the plugin.
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.1.0';
+$tasks = [
+    [
+        'classname' => 'local_points\task\process_points',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
+];

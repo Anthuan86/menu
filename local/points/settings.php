@@ -134,4 +134,12 @@ if ($hassiteconfig) {
         new moodle_url('/local/points/manage.php'),
         'local/points:viewall'
     ));
+
+    // Add points report page.
+    $ADMIN->add('localplugins', new admin_externalpage(
+        'local_points_report',
+        get_string('pointsreport', 'local_points'),
+        new moodle_url('/local/points/report.php'),
+        'local/points:viewall'
+    ));
 }

@@ -217,14 +217,25 @@ if (empty($leaderboard)) {
     echo html_writer::table($table);
 }
 
-// Link to manage rules.
+// Link to manage rules and report.
+echo html_writer::start_div('mt-3');
+
 if (has_capability('local/points:managerules', $context) ||
     ($courseid && has_capability('local/points:managerulesincourse', $context))) {
     echo html_writer::link(
         new moodle_url('/local/points/rules.php', ['courseid' => $courseid]),
         get_string('managerules', 'local_points'),
-        ['class' => 'btn btn-primary mt-3']
+        ['class' => 'btn btn-primary mr-2']
     );
 }
+
+// Link to report.
+echo html_writer::link(
+    new moodle_url('/local/points/report.php', ['courseid' => $courseid]),
+    get_string('viewreport', 'local_points'),
+    ['class' => 'btn btn-info']
+);
+
+echo html_writer::end_div();
 
 echo $OUTPUT->footer();
