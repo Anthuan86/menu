@@ -219,6 +219,8 @@ class manager {
         $record->eventname = $data->eventname;
         $record->points = $data->points;
         $record->courseid = $data->courseid ?? null;
+        $record->cmid = $data->cmid ?? null;
+        $record->programid = $data->programid ?? null;
         $record->conditions = isset($data->conditions) ? json_encode($data->conditions) : null;
         $record->enabled = $data->enabled ?? 1;
         $record->maxawards = $data->maxawards ?? null;
@@ -246,6 +248,8 @@ class manager {
         $record->eventname = $data->eventname ?? $record->eventname;
         $record->points = $data->points ?? $record->points;
         $record->courseid = array_key_exists('courseid', (array)$data) ? $data->courseid : $record->courseid;
+        $record->cmid = array_key_exists('cmid', (array)$data) ? $data->cmid : $record->cmid;
+        $record->programid = array_key_exists('programid', (array)$data) ? $data->programid : $record->programid;
         $record->conditions = isset($data->conditions) ? json_encode($data->conditions) : $record->conditions;
         $record->enabled = $data->enabled ?? $record->enabled;
         $record->maxawards = array_key_exists('maxawards', (array)$data) ? $data->maxawards : $record->maxawards;
@@ -400,6 +404,7 @@ class manager {
             '\mod_assign\event\assessable_submitted' => get_string('event_assignment_submitted', 'local_points'),
             '\core\event\user_enrolment_created' => get_string('event_user_enrolled', 'local_points'),
             '\core\event\user_loggedin' => get_string('event_user_login', 'local_points'),
+            'local_points_program_completed' => get_string('event_program_completed', 'local_points'),
         ];
     }
 

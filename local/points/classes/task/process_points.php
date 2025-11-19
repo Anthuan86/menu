@@ -88,6 +88,10 @@ class process_points extends \core\task\scheduled_task {
                     $result = $this->process_forum_posts($rule);
                     break;
 
+                case 'local_points_program_completed':
+                    $result = $this->process_program_completions($rule);
+                    break;
+
                 default:
                     $result = ['processed' => 0, 'skipped' => 0];
                     break;
@@ -526,6 +530,82 @@ class process_points extends \core\task\scheduled_task {
                 $pointscourseid,
                 $rule->id,
                 $post->id
+            );
+
+            if ($success) {
+                $processed++;
+            } else {
+                $skipped++;
+            }
+        }
+
+        set_config('lastrun_rule_' . $rule->id, time(), 'local_points');
+
+        return ['processed' => $processed, 'skipped' => $skipped];
+    }
+
+    /**
+     * Process program completions.
+     *
+     * @param \stdClass $rule The rule
+     * @return array Results
+     */
+    private function process_program_completions($rule) {
+        global $DB;
+
+        $processed = 0;
+        $skipped = 0;
+
+        // Check if local_programas table exists.
+        if (!$DB->get_manager()->table_exists('local_programas_usuarios')) {
+            mtrace('  - Table local_programas_usuarios does not exist, skipping.');
+            return ['processed' => $processed, 'skipped' => $skipped];
+        }
+
+        $params = ['completado' => 1];
+        $programwhere = '';
+
+        // Filter by specific program if set in rule.
+        if (!empty($rule->programid)) {
+            $programwhere = 'AND pu.programaid = :programid';
+            $params['programid'] = $rule->programid;
+        }
+
+        $lastrun = get_config('local_points', 'lastrun_rule_' . $rule->id);
+        $lastrun = $lastrun ? $lastrun : 0;
+
+        $sql = "SELECT pu.id, pu.userid, pu.programaid, pu.fechacompletado, p.nombre as programname
+                FROM {local_programas_usuarios} pu
+                JOIN {local_programas} p ON p.id = pu.programaid
+                WHERE pu.completado = :completado
+                AND pu.fechacompletado > :lastrun
+                $programwhere
+                ORDER BY pu.fechacompletado ASC";
+
+        $params['lastrun'] = $lastrun;
+
+        $completions = $DB->get_records_sql($sql, $params);
+
+        foreach ($completions as $completion) {
+            // Use programaid as contextid for duplicate checking.
+            if ($this->already_awarded($rule->id, $completion->userid, $completion->programaid)) {
+                $skipped++;
+                continue;
+            }
+
+            if (!$this->can_award($rule, $completion->userid)) {
+                $skipped++;
+                continue;
+            }
+
+            // Award points (globally since programs span multiple courses).
+            $success = \local_points\manager::award_points(
+                $completion->userid,
+                $rule->points,
+                $rule->name . ' - ' . $completion->programname,
+                null, // Global points for program completion.
+                $rule->id,
+                $completion->programaid
             );
 
             if ($success) {

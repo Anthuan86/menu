@@ -76,19 +76,52 @@ class rule_form extends moodleform {
         $mform->setDefault('points', 10);
 
         // Course scope.
+        $courses = get_courses();
+        $courseoptions = ['' => get_string('globalrule', 'local_points')];
+        foreach ($courses as $course) {
+            if ($course->id != SITEID) {
+                $courseoptions[$course->id] = $course->fullname;
+            }
+        }
+
         if (!$courseid) {
-            $courses = get_courses();
-            $options = ['' => get_string('globalrule', 'local_points')];
-            foreach ($courses as $course) {
-                if ($course->id != SITEID) {
-                    $options[$course->id] = $course->fullname;
+            $mform->addElement('select', 'courseid', get_string('rulecourse', 'local_points'), $courseoptions);
+        } else {
+            $mform->addElement('select', 'courseid', get_string('rulecourse', 'local_points'), $courseoptions);
+            $mform->setDefault('courseid', $courseid);
+        }
+
+        // Activity selector (populated via AJAX based on course selection).
+        global $DB;
+        $activityoptions = ['' => get_string('allactivities', 'local_points')];
+
+        // Pre-populate activities if editing an existing rule with a course.
+        $editingcourseid = $rule ? $rule->courseid : $courseid;
+        if ($editingcourseid) {
+            $modinfo = get_fast_modinfo($editingcourseid);
+            foreach ($modinfo->cms as $cm) {
+                if ($cm->uservisible) {
+                    $activityoptions[$cm->id] = $cm->name . ' (' . $cm->modname . ')';
                 }
             }
-            $mform->addElement('select', 'courseid', get_string('rulecourse', 'local_points'), $options);
-        } else {
-            $mform->addElement('hidden', 'courseid', $courseid);
-            $mform->setType('courseid', PARAM_INT);
         }
+
+        $mform->addElement('select', 'cmid', get_string('ruleactivity', 'local_points'), $activityoptions);
+        $mform->addHelpButton('cmid', 'ruleactivity', 'local_points');
+        $mform->hideIf('cmid', 'courseid', 'eq', '');
+
+        // Program selector (for program completion event).
+        $programoptions = ['' => get_string('selectprogram', 'local_points')];
+        if ($DB->get_manager()->table_exists('local_programas')) {
+            $programs = $DB->get_records('local_programas', ['activo' => 1], 'nombre', 'id, nombre');
+            foreach ($programs as $program) {
+                $programoptions[$program->id] = $program->nombre;
+            }
+        }
+
+        $mform->addElement('select', 'programid', get_string('ruleprogram', 'local_points'), $programoptions);
+        $mform->addHelpButton('programid', 'ruleprogram', 'local_points');
+        $mform->hideIf('programid', 'eventname', 'neq', 'local_points_program_completed');
 
         // Max awards.
         $mform->addElement('text', 'maxawards', get_string('rulemaxawards', 'local_points'));
@@ -192,6 +225,8 @@ if ($mform->is_cancelled()) {
     $ruledata->eventname = $data->eventname;
     $ruledata->points = $data->points;
     $ruledata->courseid = !empty($data->courseid) ? $data->courseid : null;
+    $ruledata->cmid = !empty($data->cmid) ? $data->cmid : null;
+    $ruledata->programid = !empty($data->programid) ? $data->programid : null;
     $ruledata->conditions = $conditions;
     $ruledata->enabled = $data->enabled;
     $ruledata->maxawards = !empty($data->maxawards) ? $data->maxawards : null;

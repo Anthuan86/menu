@@ -96,6 +96,15 @@ $string['event_assignment_submitted'] = 'Assignment submitted';
 $string['event_user_enrolled'] = 'User enrolled';
 $string['event_user_login'] = 'User logged in';
 $string['event_points_awarded'] = 'Points awarded';
+$string['event_program_completed'] = 'Program completed';
+
+// Activity and Program selectors.
+$string['ruleactivity'] = 'Specific Activity';
+$string['ruleactivity_help'] = 'Select a specific activity for this rule, or leave empty to apply to all activities in the course.';
+$string['allactivities'] = 'All activities';
+$string['ruleprogram'] = 'Program';
+$string['ruleprogram_help'] = 'Select the program that must be completed to trigger this rule.';
+$string['selectprogram'] = 'Select a program';
 
 // Conditions.
 $string['condition_min_grade'] = 'Minimum grade';

@@ -96,6 +96,15 @@ $string['event_assignment_submitted'] = 'Tarea enviada';
 $string['event_user_enrolled'] = 'Usuario matriculado';
 $string['event_user_login'] = 'Usuario inició sesión';
 $string['event_points_awarded'] = 'Puntos otorgados';
+$string['event_program_completed'] = 'Programa completado';
+
+// Activity and Program selectors.
+$string['ruleactivity'] = 'Actividad Específica';
+$string['ruleactivity_help'] = 'Seleccione una actividad específica para esta regla, o deje vacío para aplicar a todas las actividades del curso.';
+$string['allactivities'] = 'Todas las actividades';
+$string['ruleprogram'] = 'Programa';
+$string['ruleprogram_help'] = 'Seleccione el programa que debe completarse para activar esta regla.';
+$string['selectprogram'] = 'Seleccionar un programa';
 
 // Conditions.
 $string['condition_min_grade'] = 'Calificación mínima';
