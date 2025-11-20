@@ -52,10 +52,10 @@ if ($reward->quantity !== null && $reward->quantity <= 0) {
 }
 
 // Get user's points.
-$userpointsrecord = $DB->get_record('local_points_user', [
-    'userid' => $USER->id,
-    'courseid' => null
-]);
+$userpointsrecord = $DB->get_record_sql(
+    'SELECT * FROM {local_points_user} WHERE userid = :userid AND courseid IS NULL',
+    ['userid' => $USER->id]
+);
 $userpoints = $userpointsrecord ? $userpointsrecord->points : 0;
 
 if ($userpoints < $reward->cost) {

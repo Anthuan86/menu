@@ -57,10 +57,10 @@ if ($action && $id && confirm_sesskey()) {
             case 'reject':
                 $newstatus = 'rejected';
                 // Refund points.
-                $userpoints = $DB->get_record('local_points_user', [
-                    'userid' => $redemption->userid,
-                    'courseid' => null
-                ]);
+                $userpoints = $DB->get_record_sql(
+                    'SELECT * FROM {local_points_user} WHERE userid = :userid AND courseid IS NULL',
+                    ['userid' => $redemption->userid]
+                );
                 if ($userpoints) {
                     $userpoints->points += $redemption->points;
                     $userpoints->timemodified = time();

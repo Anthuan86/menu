@@ -39,10 +39,10 @@ $PAGE->set_heading(get_string('store', 'local_points'));
 $PAGE->set_pagelayout('standard');
 
 // Get user's points.
-$userpoints = $DB->get_field('local_points_user', 'points', [
-    'userid' => $USER->id,
-    'courseid' => null
-]);
+$userpoints = $DB->get_field_sql(
+    'SELECT points FROM {local_points_user} WHERE userid = :userid AND courseid IS NULL',
+    ['userid' => $USER->id]
+);
 $userpoints = $userpoints ? $userpoints : 0;
 
 echo $OUTPUT->header();
