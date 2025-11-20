@@ -34,10 +34,8 @@ require_login();
 
 $context = context_system::instance();
 
-// Check permissions.
-if ($userid == $USER->id) {
-    require_capability('local/points:viewown', $context);
-} else {
+// Check permissions - only require capability when viewing other users.
+if ($userid != $USER->id) {
     require_capability('local/points:viewall', $context);
 }
 
