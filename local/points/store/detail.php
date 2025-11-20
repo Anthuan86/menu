@@ -29,7 +29,6 @@ $id = required_param('id', PARAM_INT);
 require_login();
 
 $context = context_system::instance();
-require_capability('local/points:viewown', $context);
 
 // Get reward.
 $reward = $DB->get_record('local_points_rewards', ['id' => $id], '*', MUST_EXIST);

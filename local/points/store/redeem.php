@@ -30,7 +30,6 @@ $confirm = optional_param('confirm', 0, PARAM_BOOL);
 require_login();
 
 $context = context_system::instance();
-require_capability('local/points:viewown', $context);
 
 // Get reward.
 $reward = $DB->get_record('local_points_rewards', ['id' => $id], '*', MUST_EXIST);

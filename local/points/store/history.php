@@ -30,7 +30,6 @@ $perpage = 20;
 require_login();
 
 $context = context_system::instance();
-require_capability('local/points:viewown', $context);
 
 // Setup page.
 $PAGE->set_context($context);
