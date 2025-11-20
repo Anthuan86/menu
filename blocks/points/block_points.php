@@ -51,6 +51,9 @@ class block_points extends block_base {
             return $this->content;
         }
 
+        // Get context for file URLs.
+        $context = context_system::instance();
+
         // Get user's total points (sum of all courses and global).
         $userpoints = $DB->get_field_sql(
             'SELECT COALESCE(SUM(points), 0) FROM {local_points_user} WHERE userid = :userid',

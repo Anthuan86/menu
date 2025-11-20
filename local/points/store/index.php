@@ -79,13 +79,16 @@ echo '<style>
     z-index: 1;
 }
 .store-hero .points-amount {
-    font-size: 3.5rem;
-    font-weight: 800;
+    font-size: 5rem;
+    font-weight: 900;
     line-height: 1;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 .store-hero .points-label {
-    font-size: 1.2rem;
-    opacity: 0.9;
+    font-size: 1.4rem;
+    opacity: 0.95;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 .store-hero .hero-actions {
     margin-top: 20px;
@@ -152,13 +155,14 @@ echo '<style>
     background: white;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    transition: all 0.4s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 .product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(210, 10, 17, 0.2);
 }
 
 /* Product Image */
@@ -200,20 +204,28 @@ echo '<style>
     justify-content: space-between;
 }
 .badge-stock {
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.85);
     color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
 }
 .badge-hot {
-    background: #d20a11;
+    background: linear-gradient(135deg, #d20a11 0%, #ff3838 100%);
     color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    box-shadow: 0 3px 12px rgba(210, 10, 17, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 /* Quick View Overlay */
@@ -271,13 +283,14 @@ echo '<style>
     border-top: 1px solid #f0f0f0;
 }
 .price-amount {
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-size: 2rem;
+    font-weight: 900;
     color: #d20a11;
+    text-shadow: 0 2px 4px rgba(210, 10, 17, 0.1);
 }
 .price-amount small {
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 .price-status {
     font-size: 0.8rem;

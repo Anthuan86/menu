@@ -193,6 +193,7 @@ $string['noawardsyet'] = 'No awards yet';
 
 // Store.
 $string['store'] = 'Rewards Store';
+$string['gotostore'] = 'Go to Store';
 $string['rewards'] = 'Rewards';
 $string['reward'] = 'Reward';
 $string['managerewards'] = 'Manage Rewards';

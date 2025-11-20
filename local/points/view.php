@@ -85,4 +85,55 @@ echo html_writer::link(
 );
 echo html_writer::end_div();
 
+// Points history section.
+echo html_writer::tag('h3', get_string('pointshistory', 'local_points'), ['class' => 'mt-4 mb-3']);
+
+// Get history.
+$sql = "SELECT h.*, c.shortname as coursename
+        FROM {local_points_history} h
+        LEFT JOIN {course} c ON c.id = h.courseid
+        WHERE h.userid = :userid
+        ORDER BY h.timecreated DESC";
+$history = $DB->get_records_sql($sql, ['userid' => $userid], 0, 50);
+
+if (empty($history)) {
+    echo html_writer::tag('p', get_string('nohistory', 'local_points'), ['class' => 'alert alert-info']);
+} else {
+    // Build table.
+    $table = new html_table();
+    $table->head = [
+        get_string('date', 'local_points'),
+        get_string('points', 'local_points'),
+        get_string('reason', 'local_points'),
+        get_string('course'),
+    ];
+    $table->attributes['class'] = 'table table-striped';
+
+    foreach ($history as $record) {
+        $row = [];
+
+        // Date.
+        $row[] = userdate($record->timecreated, get_string('strftimedatetime', 'langconfig'));
+
+        // Points.
+        $pointsclass = $record->points > 0 ? 'text-success' : 'text-danger';
+        $pointsprefix = $record->points > 0 ? '+' : '';
+        $row[] = html_writer::tag('span', $pointsprefix . $record->points, ['class' => $pointsclass . ' font-weight-bold']);
+
+        // Reason.
+        $row[] = format_string($record->reason);
+
+        // Course.
+        if ($record->coursename) {
+            $row[] = $record->coursename;
+        } else {
+            $row[] = get_string('globalpoints', 'local_points');
+        }
+
+        $table->data[] = $row;
+    }
+
+    echo html_writer::table($table);
+}
+
 echo $OUTPUT->footer();
