@@ -38,9 +38,9 @@ $PAGE->set_title(get_string('store', 'local_points'));
 $PAGE->set_heading(get_string('store', 'local_points'));
 $PAGE->set_pagelayout('standard');
 
-// Get user's points.
+// Get user's total points (sum of all courses and global).
 $userpoints = $DB->get_field_sql(
-    'SELECT points FROM {local_points_user} WHERE userid = :userid AND courseid IS NULL',
+    'SELECT COALESCE(SUM(points), 0) FROM {local_points_user} WHERE userid = :userid',
     ['userid' => $USER->id]
 );
 $userpoints = $userpoints ? $userpoints : 0;

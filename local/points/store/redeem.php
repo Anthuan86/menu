@@ -51,12 +51,18 @@ if ($reward->quantity !== null && $reward->quantity <= 0) {
     $errors[] = get_string('rewardoutofstock', 'local_points');
 }
 
-// Get user's points.
+// Get user's total points (sum of all courses and global).
+$userpoints = $DB->get_field_sql(
+    'SELECT COALESCE(SUM(points), 0) FROM {local_points_user} WHERE userid = :userid',
+    ['userid' => $USER->id]
+);
+$userpoints = $userpoints ? $userpoints : 0;
+
+// Get global points record for deduction.
 $userpointsrecord = $DB->get_record_sql(
     'SELECT * FROM {local_points_user} WHERE userid = :userid AND courseid IS NULL',
     ['userid' => $USER->id]
 );
-$userpoints = $userpointsrecord ? $userpointsrecord->points : 0;
 
 if ($userpoints < $reward->cost) {
     $errors[] = get_string('insufficientpoints', 'local_points');

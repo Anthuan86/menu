@@ -51,15 +51,9 @@ class block_points extends block_base {
             return $this->content;
         }
 
-        // Check capability.
-        $context = context_system::instance();
-        if (!has_capability('local/points:viewown', $context)) {
-            return $this->content;
-        }
-
-        // Get user's global points.
+        // Get user's total points (sum of all courses and global).
         $userpoints = $DB->get_field_sql(
-            'SELECT points FROM {local_points_user} WHERE userid = :userid AND courseid IS NULL',
+            'SELECT COALESCE(SUM(points), 0) FROM {local_points_user} WHERE userid = :userid',
             ['userid' => $USER->id]
         );
         $userpoints = $userpoints ? $userpoints : 0;
